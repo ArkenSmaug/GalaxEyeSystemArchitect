@@ -1,0 +1,5 @@
+MissionID,Drones,DateTime,Length,SamplingFreq,PayloadList
+ID1,All,31-08-2024::12:30:45,120,50,a.png;b.png;c.png
+ID1,MSN01,31-08-2024::12:12:11,240,100,d.png;e.png;f.png
+ID2,MSN03,31-08-2024::15:23:42,360,150,g.png;h.png;i.png
+ID3,MSN02,31-08-2024::12:30:45,480,250,j.png;k.png;l.png

@@ -1,0 +1,86 @@
+@startuml highLevel
+left to right direction
+allow_mixing 
+actor User
+object "Drone" as Drone
+object "GCS" as GCS
+database Database
+
+Drone : <img:images/drone.png{scale=0.2}>
+GCS   : <img:images/gcs.png{scale=0.4}>
+GCS "c2link"<--> Drone
+Database "tcp link"<--> GCS
+User --> GCS
+@enduml
+
+@startuml UI
+actor User
+
+package HLR as "GCS SW Services" {
+     usecase startMission as "Start the Mission"
+     usecase endMission as "End the Mission"
+     usecase abortMission as "Abort the Mission"
+     usecase payload as "Payload Interaction"
+     usecase respond as "Respond with appropriate message"
+ }
+
+ User --> startMission
+ User --> endMission
+ User --> payload
+ User --> abortMission
+ startMission --> respond
+ endMission --> respond
+ payload --> respond
+ abortMission --> respond
+@enduml
+
+@startuml GCS
+left to right direction
+allow_mixing 
+object "GCS SW Services" as GCSsw
+object "C2Link HW" as c2L
+object "Payload Link HW" as p2l
+object "TCP link wireless/wired" as tcp
+
+GCSsw : <img:images/sw_services.jpg{scale=0.1}>
+c2L   : <img:images/antenna.png{scale=0.2}>
+p2l    : <img:images/antenna.png{scale=0.2}>
+tcp   : <img:images/modem.png{scale=0.2}>
+
+tcp <----> "TCP Modem Driver" GCSsw
+GCSsw "C2Link Device Driver" <----> c2L
+GCSsw "Payload link Device driver Device Driver" <----> p2l
+@enduml
+
+@startuml GCSSW
+left to right direction
+package GCSSW as "GCS SW Components"{
+    usecase ui as "GUI for user interaction"
+    usecase tcp as "Database Link"
+    usecase c2d as "C2Link Downstream"
+    usecase c2u as "C2Link Upstream"
+    usecase pld as "Payload Link Downstream"
+}
+package GCSthreads as "GCS Threads"{
+    usecase t1 as "Thread 1"
+    usecase t2 as "Thread 2"
+    usecase t3 as "Thread 3"
+    usecase t4 as "Thread 4"
+}
+
+package GCSHW as "GCS HW Components"{
+    usecase tcphw as "Database link Modem"
+    usecase c2hw as "C2Link HW"
+    usecase plhw as "Payload Link HW"
+}
+
+t1 --> ui
+t1 --> tcp
+t2 --> c2u
+t3 --> c2d
+t4--> pld
+tcp --> tcphw
+c2u --> c2hw
+c2d <-- c2hw
+pld <-- plhw
+@enduml
